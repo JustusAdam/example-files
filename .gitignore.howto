@@ -1,0 +1,34 @@
+# add files here to have them excluded from being tracked by git
+# paths matching names will be ignored by git
+#
+# write every new rule on a separate line
+#
+# lines beginning with '#' are comments and will be ignored
+#
+# you can specify file different ways
+#
+# directories:
+#
+# my_directory/
+# target/
+# build/out/
+#
+# individual files:
+# main.c (matches all files with that exact name)
+# crs/main/robo/main.c (matches the file in that directory, relative to the git root)
+#
+# types of files:
+# *.log
+# *.yaml
+#
+#
+#
+#
+# if is good form to add comments above every block of rules
+# to indicate to others why these files are included
+# like so:
+#
+# # zip files, because git cannot merge compressed files
+# *.zip
+# zipped/
+# *.7z
