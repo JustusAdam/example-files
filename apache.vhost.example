@@ -1,91 +1,95 @@
-#   Suggestion for Dev-Systems:
-#   Create a symlink to this file under /etc/apache2/sites-available
-#   Do not forget to a2ensite
+#	Suggestion for Dev-Systems:
+#	Create a symlink to this file under /etc/apache2/sites-available
+#	Do not forget to a2ensite
 
 <VirtualHost *:80>
 
-    ServerName dev.example.com
-    ServerAlias www.dev.example.com
-    
-    #   suggestion for single-user dev systems: 
-    #   create a symlink to your actual directory in the workspace
-    #
-    DocumentRoot /var/www/example/htdocs
-    
-    #   This is needed for all PHP Websites
-    #
-    php_value include_path .:/usr/share/php:/usr/share/pear
-    
-    #   force non www
-    #
-    RewriteEngine On
-    RewriteCond %{HTTP_HOST} !dev.example.com$ [NC]
-    RewriteRule ^(.*)$ http://dev.example.com$1 [L,R=301]
-    
-    #   force https
-    #
-    RewriteCond %{HTTPS} !=on
-    RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI} [NE,R=301,L]
-    
-    <Directory /var/www/example/htdocs>
-        Options FollowSymlinks
-        AllowOverride All
-        Order allow,deny
-        Allow from all
-    </Directory>
+	ServerName dev.example.com
+	ServerAlias www.dev.example.com
+
+	#	Noone needs to know what you are running
+	#
+	ServerSignature Off
+
+	#	suggestion for single-user dev systems:
+	#	create a symlink to your actual directory in the workspace
+	#
+	DocumentRoot /var/www/example/htdocs
+
+	#	This is needed for all PHP Websites
+	#
+	php_value include_path .:/usr/share/php:/usr/share/pear
+
+	#	force non www
+	#
+	RewriteEngine On
+	RewriteCond %{HTTP_HOST} !dev.example.com$ [NC]
+	RewriteRule ^(.*)$ http://dev.example.com$1 [L,R=301]
+
+	#	force https
+	#
+	RewriteCond %{HTTPS} !=on
+	RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI} [NE,R=301,L]
+
+	<Directory /var/www/example/htdocs>
+		Options FollowSymlinks
+		AllowOverride All
+		Order allow,deny
+		Allow from all
+	</Directory>
 
 </VirtualHost>
 
 <IfModule mod_ssl.c>
-    #   Try <VirtualHost dev.example.com:443> to avoid problems with other sites on https
-    #   
-    <VirtualHost *:443>
+	#	Try <VirtualHost dev.example.com:443> to avoid problems with other sites on https
+	#
+	<VirtualHost *:443>
 
-        ServerName dev.example.com
+		ServerName dev.example.com
 
-        ServerAdmin admin@localhost
-        
-        #   SSL Engine Switch:
-        #   Enable/Disable SSL for this virtual host.
-        #
-        SSLEngine on
+		ServerAdmin admin@localhost
 
-        #   Strong SSL security
-        #
-        SSLProtocol all -SSLv2
-        SSLHonorCipherOrder on
-        SSLCipherSuite "ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS"
-        Header add Strict-Transport-Security: "max-age=15768000;includeSubdomains"
-        SSLCompression Off
+		#	SSL Engine Switch:
+		#	Enable/Disable SSL for this virtual host.
+		#
+		SSLEngine on
 
-        #   A self-signed (snakeoil) certificate can be created by installing
-        #   the ssl-cert package. See
-        #   /usr/share/doc/apache2.2-common/README.Debian.gz for more info.
-        #   If both key and certificate are stored in the same file, only the
-        #   SSLCertificateFile directive is needed.
-        #
-        SSLCertificateFile      /path/to/cert/dev.example.com.cert.pem
-        SSLCertificateKeyFile   /path/to/key/dev.example.com.key.pem
-        
-        #   This will mostly be needed if you have your "own" root cert
-        #
-        SSLCertificateChainFile /path/to/cert/ca-chain.cert.pem
+		#	Strong SSL security
+		#
+		SSLProtocol all -SSLv2
+		SSLHonorCipherOrder on
+		SSLCipherSuite "ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS"
+		Header add Strict-Transport-Security: "max-age=15768000;includeSubdomains"
+		SSLCompression Off
 
-        #   Force down to http if wanted with prior check of
-        #   the certificate (possible issues!)
-        #
-        #   RewriteCond %{HTTPS} off
-        #   RewriteRule (.*) http://%{HTTP_HOST}%{REQUEST_URI}
-        
-        #   Use this part if you don't want to encrypt this site
-        #   and redirect every visitor to http without 
-        #   checking the certificate validity
-        #
-        #   Redirect / http://dev.example.com/
+		#	A self-signed (snakeoil) certificate can be created by installing
+		#	the ssl-cert package. See
+		#	/usr/share/doc/apache2.2-common/README.Debian.gz for more info.
+		#	If both key and certificate are stored in the same file, only the
+		#	SSLCertificateFile directive is needed.
+		#
+		SSLCertificateFile		/path/to/cert/dev.example.com.cert.pem
+		SSLCertificateKeyFile	/path/to/key/dev.example.com.key.pem
 
-    </VirtualHost>
+		#	This will mostly be needed if you have your "own" root cert
+		#
+		SSLCertificateChainFile /path/to/cert/ca-chain.cert.pem
+
+		#	Force down to http if wanted with prior check of
+		#	the certificate (possible issues!)
+		#
+		#	RewriteCond %{HTTPS} off
+		#	RewriteRule (.*) http://%{HTTP_HOST}%{REQUEST_URI}
+
+		#	Use this part if you don't want to encrypt this site
+		#	and redirect every visitor to http without
+		#	checking the certificate validity
+		#
+		#	Redirect / http://dev.example.com/
+
+	</VirtualHost>
 
 </IfModule>
 
-#   For further see http://vimdoc.sourceforge.net/htmldoc/quickref.html#option-list
-#   vim: syntax=apache ts=2 sw=2 sts=2 sr noet
+#	For further see http://vimdoc.sourceforge.net/htmldoc/quickref.html#option-list
+#	vim: syntax=apache ts=2 sw=2 sts=2 sr noet
