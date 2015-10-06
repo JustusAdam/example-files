@@ -1,0 +1,32 @@
+# You define a VirtualHost for a specific IP and Port.
+# Wildcard entries can be defined by * for both of them
+# They will trigger a matching
+<VirtualHost IP-Adress:Port>
+  
+  Directive Value
+  
+  # Define special rules für certain directories
+  # You also can use Location for a virtual path
+	<Directory /var/www/example/htdocs>
+	  
+	  Directive Value
+	
+	</Directory>
+
+</VirtualHost>
+
+# You have to look out where you write certain directives
+# Some need to be placed inside an area
+
+# You can nest different areas into another
+# There are plenty of useful areas that help with configuring you server
+<IfModule mod_ssl.c>
+	<VirtualHost *:443>
+	
+	  Directive Value
+
+	</VirtualHost>
+</IfModule>
+
+#	For further see http://vimdoc.sourceforge.net/htmldoc/quickref.html#option-list
+#	vim: syntax=apache ts=2 sw=2 sts=2 sr noet
