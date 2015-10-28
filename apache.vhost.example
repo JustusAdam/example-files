@@ -56,7 +56,7 @@
 
 		#	Strong SSL security
 		#
-		SSLProtocol all -SSLv2
+		SSLProtocol all -SSLv2 -SSLv3
 		SSLHonorCipherOrder on
 		SSLCipherSuite "ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS"
 		Header add Strict-Transport-Security: "max-age=15768000;includeSubdomains"
